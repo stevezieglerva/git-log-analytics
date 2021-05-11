@@ -127,3 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+git-csv-analytics.code-workspace
+reports/**/**
+run_react.sh
+run_forem.sh
+run_govuk.sh
+run_cw.sh
+run_ops_aws.sh
+*.png
+git_log.txt
+output/*.*
+samples/*.*

@@ -1,0 +1,4 @@
+html-testRunner
+coverage
+pandas
+matplotlib
