@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>Git Analysis - /Users/sziegler/Documents/GitHub/elasticsearch</title>
+        <style>
+            h1 {color: darkblue}
+            h2 {color: #507786}
+            h3 {color: #539DC2}
+        </style>
+    </head>
+    <body>
+        <h1>Git Analysis for: /Users/sziegler/Documents/GitHub/elasticsearch</h1>
+
+        <h2>Commits By Directory</h2>
+        Shows commits by the first two directories of the project to visualize what was worked on over time <br/>
+        <br/>
+            <h3>All Time:</h3>
+            <img src="git_datehistogram_two_dirs.png"></img><br/>
+            <h3>Last 30 Days:</h3>
+            <img src="git_datehistogram_two_dirs_30_days.png"></img><br/>
+        <hr/>
+        <h2>Commits By Author</h2>
+        Shows commits by author to visualize who was working and when <br/>
+        <br/>
+            <h3>All Time:</h3>
+            <img src="git_datehistogram_author.png"></img><br/>
+            <h3>Last 30 Days:</h3>
+            <img src="git_datehistogram_author_30_days.png"></img><br/>
+        <hr/>
+        <h2>Top Commits</h2>
+            <h3>By Author:</h3>
+            Shows commits by author to show the top contributors <br/>
+            <br/>
+            <img src="git_histogram_author_commit_hash_unique_count.png"></img><br/>
+
+            <h3>By File:</h3>
+            Shows commits by file to show the busiest file <br/>
+            <br/>
+            <img src="git_histogram_file_abbr_commit_hash_unique_count.png"></img><br/>
+
+            <h3>By Directory:</h3>
+            Shows commits by parent directory to show the busiest parent directory <br/>
+            <br/>            
+            <img src="git_histogram_two_dirs_commit_hash_unique_count.png"></img><br/>
+        <hr/>
+        <h2>Hotspots</h2>
+            Shows hotspot files in the code that are: <br/>
+            <ul>
+                <li>complex as measured by file size</li>
+                <li>changing frequently as measured by the number of commits</li>
+                <li>recent having changed within 365 days</li>
+            </ul>
+
+            <pre>
+            
+🔥 Hotspots 
+Commits  Comp.   Age    Score  File
+  479   328395     7    100.0  server/src/test/java/org/elasticsearch/index/engine/InternalEngineTests.java
+  478   181024     6     55.0  server/src/main/java/org/elasticsearch/index/shard/IndexShard.java
+  357   208313     1     47.3  server/src/test/java/org/elasticsearch/index/shard/IndexShardTests.java
+  422   164637     0     44.2  server/src/main/java/org/elasticsearch/repositories/blobstore/BlobStoreRepository.java
+  334   175359     2     37.2  server/src/main/java/org/elasticsearch/snapshots/SnapshotsService.java
+  265   213786    20     36.0  client/rest-high-level/src/test/java/org/elasticsearch/client/documentation/MlClientDocumentationIT.java
+  387   140061     7     34.5  server/src/main/java/org/elasticsearch/index/engine/InternalEngine.java
+  450   107638    13     30.8  test/framework/src/main/java/org/elasticsearch/test/InternalTestCluster.java
+  291   163705    36     30.3  client/rest-high-level/src/test/java/org/elasticsearch/client/MachineLearningIT.java
+  389   105875    11     26.2  test/framework/src/main/java/org/elasticsearch/test/ESIntegTestCase.java
+
+
+            </pre>
+            <h3>Possible High Bus Factor:</h3>
+            Show the number of unique authors per hotspot file in the last year. If a hotspot file only has one author for the last 365 day, it has a high "bus factor" if that person left the team.<br/>
+            <img src="git_histogram_bus_factor.png"></img><br/>
+
+    </body>
+</html>

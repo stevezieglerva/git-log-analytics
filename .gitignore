@@ -134,7 +134,7 @@ run_forem.sh
 run_govuk.sh
 run_cw.sh
 run_ops_aws.sh
-*.png
+output/*.png
 git_log.txt
 output/*.*
 samples/*.*
