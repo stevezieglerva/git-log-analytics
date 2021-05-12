@@ -5,7 +5,13 @@ This python script reads a pre-generated git log output text file, creates a CSV
 
 It was inspired by Adam Tornhill's [GOTO 2019 Prioritizing Technical Debt as if Time and Money Matters](https://www.youtube.com/watch?v=fl4aZ2KXBsQ) talk.
 
-
+## Pre-reqs
+* git command line installed
+* repo for analysis is located in a parent directory (sibiling to the level of this repo)
+* install the project requirements
+```
+pip install requirements.txt
+```
 ## Usage
 Run the process_parent_dir.sh bash script supplying a parent directory of a different repo.
 
