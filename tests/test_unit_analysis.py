@@ -15,7 +15,7 @@ class UnitTests(unittest.TestCase):
         print(results)
 
         # Assert
-        self.assertEqual(results.shape, (17, 14))
+        self.assertEqual(results.shape, (15, 15))
 
     def test_calculate_file_complexity__given_input_dir_of_files__files_scores_returned(
         self,
@@ -49,8 +49,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             results,
             {
-                ".gitignore": 2,
-                "README.md": 1,
+                ".gitignore": 1,
                 "report_template_json.txt": 1,
                 "requirements.txt": 1,
                 "run_tests.sh": 1,
@@ -81,7 +80,6 @@ class UnitTests(unittest.TestCase):
             results,
             {
                 ".gitignore": 2,
-                "README.md": 2,
                 "report_template_json.txt": 2,
                 "requirements.txt": 2,
                 "run_tests.sh": 2,
