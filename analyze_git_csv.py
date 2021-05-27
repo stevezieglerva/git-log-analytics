@@ -105,7 +105,7 @@ def determine_hotspot_data(
                     age=commit_age,
                 )
                 results.append(new_file)
-            normalized_results = []
+    normalized_results = []
     for count, file in enumerate(results):
         new_score = round((file.score / max_score) * 100, 1)
         normalized_score = FileInfo(
