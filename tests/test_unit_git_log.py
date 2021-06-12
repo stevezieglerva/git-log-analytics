@@ -135,6 +135,30 @@ c8ed1ef,1576592170,2019-12-17T09:16:10,2019-12-17,2019,12,17,"Steve Ziegler","RE
         for count, line in enumerate(results.split("\n")):
             self.assertEqual(line, expected_splits[count], f"line {count} is different")
 
+    def test_process__given_exclude_files__then_three_lines_created(self):
+        # Arrange
+        input = """^^c8ed1ef--1576592170--2019-12-17T09:16:10-05:00--Steve Ziegler
+
+
+    3	5	README.md
+    0	1	sam-app/add_cw_log_error_metric/CloudFormationReplicator.py
+    ^^a999999--1576592605--2019-12-17T09:23:25-05:00--Steve Ziegler
+
+
+    2	1	sam-app/add_cw_log_error_metric/CloudFormationReplicator.py
+    """
+
+        # Act
+        results = process_git_log(input, "READ|cw")
+        print(results)
+
+        # Assert
+        expected = """commit_hash,epoch,timestamp,date,year,month,day,author,file,churn_count,dir_1,dir_2,dir_3,dir_4
+"""
+        expected_splits = expected.split("\n")
+        for count, line in enumerate(results.split("\n")):
+            self.assertEqual(line, expected_splits[count], f"line {count} is different")
+
 
 if __name__ == "__main__":
     unittest.main()

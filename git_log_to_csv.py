@@ -45,7 +45,7 @@ def get_first_directories_from_filename(file):
     return [dir_1, dir_2, dir_3, dir_4]
 
 
-def process_git_log(log):
+def process_git_log(log, exclude_file_pattern=""):
     commits = log.split("^^")
 
     result = "commit_hash,epoch,timestamp,date,year,month,day,author,file,churn_count,dir_1,dir_2,dir_3,dir_4\n"
@@ -78,14 +78,21 @@ def process_git_log(log):
                 total_churn = insertions + deletions
 
                 file = churn_line_parts[2]
-                dirs = get_first_directories_from_filename(file)
+                if include_file(file, exclude_file_pattern):
+                    dirs = get_first_directories_from_filename(file)
 
-                result = (
-                    result
-                    + f'{hash},{epoch},{tmsp},{day_only},{year},{month},{day},"{author}","{file}",{total_churn},{dirs[0]},{dirs[1]},{dirs[2]},{dirs[3]}\n'
-                )
+                    result = (
+                        result
+                        + f'{hash},{epoch},{tmsp},{day_only},{year},{month},{day},"{author}","{file}",{total_churn},{dirs[0]},{dirs[1]},{dirs[2]},{dirs[3]}\n'
+                    )
 
     return result
+
+
+def include_file(file, exclude_file_pattern):
+    if exclude_file_pattern != "" and re.findall(exclude_file_pattern, file):
+        return False
+    return True
 
 
 if __name__ == "__main__":
