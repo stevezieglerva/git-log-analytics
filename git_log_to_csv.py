@@ -45,7 +45,7 @@ def get_first_directories_from_filename(file):
     return [dir_1, dir_2, dir_3, dir_4]
 
 
-def process_git_log(log, exclude_file_pattern=""):
+def process_git_log(log, exclude_file_pattern="", exclude_author_pattern=""):
     commits = log.split("^^")
 
     result = "commit_hash,epoch,timestamp,date,year,month,day,author,file,churn_count,dir_1,dir_2,dir_3,dir_4\n"
@@ -68,29 +68,35 @@ def process_git_log(log, exclude_file_pattern=""):
             day = tmsp_date.day
 
             author = commit_basics_parts[3]
+            if include_author(author, exclude_file_pattern):
+                total_lines = len(commit_lines)
+                for row_index in range(3, total_lines - 1):
+                    churn_line = commit_lines[row_index]
+                    churn_line_parts = churn_line.split("\t")
+                    insertions = get_churn_int_values_even_if_dash(churn_line_parts[0])
+                    deletions = get_churn_int_values_even_if_dash(churn_line_parts[1])
+                    total_churn = insertions + deletions
 
-            total_lines = len(commit_lines)
-            for row_index in range(3, total_lines - 1):
-                churn_line = commit_lines[row_index]
-                churn_line_parts = churn_line.split("\t")
-                insertions = get_churn_int_values_even_if_dash(churn_line_parts[0])
-                deletions = get_churn_int_values_even_if_dash(churn_line_parts[1])
-                total_churn = insertions + deletions
+                    file = churn_line_parts[2]
+                    if include_file(file, exclude_file_pattern):
+                        dirs = get_first_directories_from_filename(file)
 
-                file = churn_line_parts[2]
-                if include_file(file, exclude_file_pattern):
-                    dirs = get_first_directories_from_filename(file)
-
-                    result = (
-                        result
-                        + f'{hash},{epoch},{tmsp},{day_only},{year},{month},{day},"{author}","{file}",{total_churn},{dirs[0]},{dirs[1]},{dirs[2]},{dirs[3]}\n'
-                    )
+                        result = (
+                            result
+                            + f'{hash},{epoch},{tmsp},{day_only},{year},{month},{day},"{author}","{file}",{total_churn},{dirs[0]},{dirs[1]},{dirs[2]},{dirs[3]}\n'
+                        )
 
     return result
 
 
 def include_file(file, exclude_file_pattern):
     if exclude_file_pattern != "" and re.findall(exclude_file_pattern, file):
+        return False
+    return True
+
+
+def include_author(author, exclude_author_pattern):
+    if exclude_author_pattern != "" and re.findall(exclude_author_pattern, author):
         return False
     return True
 
