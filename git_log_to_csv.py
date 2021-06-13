@@ -1,15 +1,19 @@
+import argparse
 import re
 import sys
 from datetime import datetime
 
 
-def create_csv(filename):
+def create_csv(filename, exclude_file_pattern, exclude_author_pattern):
+    print(f"exclude_author_pattern:{exclude_author_pattern}")
     print(f"🗓️  Reading git log: {filename}")
     git_log_text = ""
     with open(filename, "r") as file:
         git_log_text = file.read()
 
-    csv_data = process_git_log(git_log_text)
+    csv_data = process_git_log(
+        git_log_text, exclude_file_pattern, exclude_author_pattern
+    )
 
     with open("output/git_log.csv", "w") as file:
         file.write(csv_data)
@@ -68,7 +72,7 @@ def process_git_log(log, exclude_file_pattern="", exclude_author_pattern=""):
             day = tmsp_date.day
 
             author = commit_basics_parts[3]
-            if include_author(author, exclude_file_pattern):
+            if include_author(author, exclude_author_pattern):
                 total_lines = len(commit_lines)
                 for row_index in range(3, total_lines - 1):
                     churn_line = commit_lines[row_index]
@@ -90,17 +94,33 @@ def process_git_log(log, exclude_file_pattern="", exclude_author_pattern=""):
 
 
 def include_file(file, exclude_file_pattern):
-    if exclude_file_pattern != "" and re.findall(exclude_file_pattern, file):
+    if exclude_file_pattern != "" and re.findall(
+        exclude_file_pattern, file, re.IGNORECASE
+    ):
         return False
     return True
 
 
 def include_author(author, exclude_author_pattern):
-    if exclude_author_pattern != "" and re.findall(exclude_author_pattern, author):
+    if exclude_author_pattern != "" and re.findall(
+        exclude_author_pattern, author, re.IGNORECASE
+    ):
         return False
     return True
 
 
 if __name__ == "__main__":
-    filename = sys.argv[1]
-    create_csv(filename)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "filename",
+        type=str,
+        help="filename of the csv logfile",
+    )
+    parser.add_argument(
+        "filename",
+        type=str,
+        help="filename of the csv logfile",
+    )
+    args = parser.parse_args()
+    print(args.accumulate(args.integers))
+    create_csv(args.file)
