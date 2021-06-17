@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from DateHistogram import DateHistogram
 from Histogram import Histogram
 from StackedHistogram import StackedHistogram
 from StackedDateHistogram import StackedDateHistogram
@@ -181,6 +182,8 @@ def create_charts(df, hotspots):
     create_single_histogram("file_abbr", "commit_hash", "unique_count", df)
     create_single_stackeddatehistogram("month", "author", df)
     create_single_stackeddatehistogram("month", "two_dirs", df)
+    create_single_datehistogram("month", "author", "unique_count", df)
+    create_single_datehistogram("month", "commit_hash", "unique_count", df)
 
     last_month = datetime.now() - timedelta(days=30)
     last_30_days = df[df["datetime"] >= last_month]
@@ -204,6 +207,17 @@ def create_single_histogram(field, value_field, aggregation, df, filename_suffix
     histogram.set_max_groupings(10)
     histogram.save_plot(
         f"output/git_histogram_{field}_{value_field}_{aggregation}{filename_suffix}.png"
+    )
+
+
+def create_single_datehistogram(
+    date_field, value_field, aggregation, df, filename_suffix=""
+):
+    histogram = DateHistogram(date_field, value_field, df)
+    histogram.set_chart_type("bar")
+    histogram.set_aggregation(aggregation)
+    histogram.save_plot(
+        f"output/git_datehistogram_{value_field}_{aggregation}{filename_suffix}.png"
     )
 
 
@@ -260,7 +274,20 @@ def create_html_file(csv_file, print_text):
     <body>
         <h1>Git Analysis for: {csv_file}</h1>
 
-        <h2>Commits By Directory</h2>
+        <h2>Total Commits</h2>
+        Shows total commits over time <br/>
+        <br/>
+            <img src="git_datehistogram_commit_hash_unique_count.png"></img><br/>
+        <hr/>
+
+        <h2>Unique Authors</h2>
+        Shows the number of unique authors making commits per month <br/>
+        <br/>
+            <img src="git_datehistogram_author_unique_count.png"></img><br/>
+        <hr/>
+
+
+        <h2>Commits By Top Directories</h2>
         Shows commits by the first two directories of the project to visualize what was worked on over time <br/>
         <br/>
             <h3>All Time:</h3>
@@ -268,14 +295,16 @@ def create_html_file(csv_file, print_text):
             <h3>Last 30 Days:</h3>
             <img src="git_datehistogram_two_dirs_30_days.png"></img><br/>
         <hr/>
-        <h2>Commits By Author</h2>
-        Shows commits by author to visualize who was working and when <br/>
+
+        <h2>Commits By Top Author</h2>
+        Shows commits by the tops author to visualize who was working and when <br/>
         <br/>
             <h3>All Time:</h3>
             <img src="git_datehistogram_author.png"></img><br/>
             <h3>Last 30 Days:</h3>
             <img src="git_datehistogram_author_30_days.png"></img><br/>
         <hr/>
+
         <h2>Top Commits</h2>
             <h3>By Author:</h3>
             Shows commits by author to show the top contributors <br/>
@@ -292,6 +321,7 @@ def create_html_file(csv_file, print_text):
             <br/>            
             <img src="git_histogram_two_dirs_commit_hash_unique_count.png"></img><br/>
         <hr/>
+
         <h2>Hotspots</h2>
             Shows hotspot files in the code that are: <br/>
             <ul>
